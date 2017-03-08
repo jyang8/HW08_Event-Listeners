@@ -2,8 +2,17 @@ var svg = document.getElementById("vector");
 
 var circleClick = function(e) {
     console.log("CIRCLE: " + e.target);
+    this.addEventListener("click", circleClick2, true);
     this.setAttribute("fill", "blue");
+    //svg.removeChild(this);
     //e.stopPropagation();
+}
+
+var circleClick2 = function(e) {
+    console.log("CIRCLE: " + e.target);
+    svg.removeChild(this);
+    var newDot = makeDot( 123, 123 ); // replace 123 with random
+    svg.appendChild( newDot );
 }
 
 var makeDot = function(x, y) {    
