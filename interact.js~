@@ -41,40 +41,26 @@ var move = function() {
     
     var screensaver = function() {
 		var dots = svg.children;
-		var right = true;
-		var down = true;
-
-		for (var i = 0; i < dots.length; i++) {
-			var x = parseInt( dots[i].getAttribute("cx") );
-			var y = parseInt( dots[i].getAttribute("cy") );
-
-			if (x >= (width-r)) {
-			right = false;
-			} else if (x <= 0) {
-			right = true;
-			}
-			if (y >= (height-r)) {
-			down = false;
-			} else if (y <= 0) {
-			down = true;
-			}
-
-			if (right == true) {
-			dots[i].setAttribute("cx", x+1);
-			} else {
-			dots[i].setAttribute("cx", x-1);
-			}
-			if (down == true) {
-			dots[i].setAttribute("cy", y+1);
-			} else {
-			dots[i].setAttribute("cy", y-1);
-			}
-
-			rid = window.requestAnimationFrame( screensaver );
-			
+		var dx = 1;
+		var dy = 1;
+		for (var i = 0; i < dots.length; i+1){
+			var dvd = function(e) {
+				console.log(rid);
+				dots[i].setAttribute("x",x);
+				dots[i].setAttribute("y",y);
+				x += dx;
+				y += dy;
+				if(x <= 0 || x >= width-r){
+					dx *= -1;
+				}
+				if(y <= 0 || y >= height-r){
+					dy *= -1;
+				}
+				rid = window.requestAnimationFrame(dvd);
+			};
+		dvd();
 		}
     }
-    
     screensaver();
     
 };
