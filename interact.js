@@ -1,7 +1,7 @@
 var svg = document.getElementById("vector");
 var width = svg.getAttribute("width");
 var height = svg.getAttribute("height");
-var r = 20;
+var r = 32;
 var rid = 0;
 
 var circleClick = function(e) {
@@ -46,6 +46,8 @@ var move = function() {
 			var y = parseInt( dots[i].getAttribute("cy") );
 			var dx = parseInt( dots[i].getAttribute("dx") );
 			var dy = parseInt( dots[i].getAttribute("dy") );
+			var rad = parseInt( dots[i].getAttribute("r") );
+
 			x += dx;
 			y += dy;
 			dots[i].setAttribute("cx",x);
@@ -58,6 +60,16 @@ var move = function() {
 			}
 			dots[i].setAttribute("dx",dx);
 			dots[i].setAttribute("dy",dy);
+			if (x == width/2){
+				dots[i].setAttribute("r",rad/2);
+				var circ = makeDot(x,y);
+				circ.setAttribute("dx",dx *= -1);
+				circ.setAttribute("dy",dy *= -1);
+				circ.setAttribute("r", rad/2);
+				svg.appendChild( circ );
+			}
+
+
 		}
 		rid = window.requestAnimationFrame(screensaver);
 	}

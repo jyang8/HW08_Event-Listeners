@@ -1,7 +1,7 @@
 var svg = document.getElementById("vector");
 var width = svg.getAttribute("width");
 var height = svg.getAttribute("height");
-var r = 20;
+var r = 32;
 var rid = 0;
 
 var circleClick = function(e) {
@@ -20,6 +20,8 @@ var circleClick = function(e) {
 
 var makeDot = function(x, y) {       
     var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	c.setAttribute("dx",1);
+	c.setAttribute("dy",1);
     c.setAttribute("cx", x);
     c.setAttribute("cy", y);
     c.setAttribute("r", r);
@@ -35,37 +37,44 @@ var drawDot = function(e) {
     }
 }
 
-
 var move = function() {
-    window.cancelAnimationFrame( rid );
-    
-    var screensaver = function() {
-		var dots = svg.children;
-		var dx = 1;
-		var dy = 1;
-		for (var i = 0; i < dots.length; i+1){
-			var dvd = function(e) {
-				console.log(rid);
-				dots[i].setAttribute("x",x);
-				dots[i].setAttribute("y",y);
-				x += dx;
-				y += dy;
-				if(x <= 0 || x >= width-r){
-					dx *= -1;
-				}
-				if(y <= 0 || y >= height-r){
-					dy *= -1;
-				}
-				rid = window.requestAnimationFrame(dvd);
-			};
-		dvd();
+	window.cancelAnimationFrame( rid );
+	var dots = svg.children;
+	var screensaver = function() {
+		for (var i = 0; i < dots.length; i++) {
+			var x = parseInt( dots[i].getAttribute("cx") );
+			var y = parseInt( dots[i].getAttribute("cy") );
+			var dx = parseInt( dots[i].getAttribute("dx") );
+			var dy = parseInt( dots[i].getAttribute("dy") );
+			var rad = parseInt( dots[i].getAttribute("r") );
+
+			x += dx;
+			y += dy;
+			dots[i].setAttribute("cx",x);
+			dots[i].setAttribute("cy",y);
+			if(x-r <= 0 || x >= width-r){
+				dx *= -1;
+			}
+			if(y-r <= 0 || y >= height-r){
+				dy *= -1;
+			}
+			dots[i].setAttribute("dx",dx);
+			dots[i].setAttribute("dy",dy);
+			if (x == width/2){
+				dots[i].setAttribute("r",rad/2);
+				var circ = makeDot(x,y);
+				circ.setAttribute("dx",dx *= -1);
+				circ.setAttribute("dy",dy *= -1);
+				circ.setAttribute("r", rad/2);
+				svg.appendChild( circ );
+			}
+
+
 		}
-    }
-    screensaver();
-    
+		rid = window.requestAnimationFrame(screensaver);
+	}
+	screensaver();
 };
-
-
 
 var clear = function(e) {
     while (svg.lastChild){
