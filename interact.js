@@ -20,6 +20,8 @@ var circleClick = function(e) {
 
 var makeDot = function(x, y) {       
     var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	c.setAttribute("dx",1);
+	c.setAttribute("dy",1);
     c.setAttribute("cx", x);
     c.setAttribute("cy", y);
     c.setAttribute("r", r);
@@ -35,51 +37,32 @@ var drawDot = function(e) {
     }
 }
 
-
 var move = function() {
-    window.cancelAnimationFrame( rid );
-    
-    var screensaver = function() {
-		var dots = svg.children;
-		var right = true;
-		var down = true;
-
+	window.cancelAnimationFrame( rid );
+	var dots = svg.children;
+	var screensaver = function() {
 		for (var i = 0; i < dots.length; i++) {
 			var x = parseInt( dots[i].getAttribute("cx") );
 			var y = parseInt( dots[i].getAttribute("cy") );
-
-			if (x >= (width-r)) {
-			right = false;
-			} else if (x <= 0) {
-			right = true;
+			var dx = parseInt( dots[i].getAttribute("dx") );
+			var dy = parseInt( dots[i].getAttribute("dy") );
+			x += dx;
+			y += dy;
+			dots[i].setAttribute("cx",x);
+			dots[i].setAttribute("cy",y);
+			if(x-r <= 0 || x >= width-r){
+				dx *= -1;
 			}
-			if (y >= (height-r)) {
-			down = false;
-			} else if (y <= 0) {
-			down = true;
+			if(y-r <= 0 || y >= height-r){
+				dy *= -1;
 			}
-
-			if (right == true) {
-			dots[i].setAttribute("cx", x+1);
-			} else {
-			dots[i].setAttribute("cx", x-1);
-			}
-			if (down == true) {
-			dots[i].setAttribute("cy", y+1);
-			} else {
-			dots[i].setAttribute("cy", y-1);
-			}
-
-			rid = window.requestAnimationFrame( screensaver );
-			
+			dots[i].setAttribute("dx",dx);
+			dots[i].setAttribute("dy",dy);
 		}
-    }
-    
-    screensaver();
-    
+		rid = window.requestAnimationFrame(screensaver);
+	}
+	screensaver();
 };
-
-
 
 var clear = function(e) {
     while (svg.lastChild){
