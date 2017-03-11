@@ -47,7 +47,6 @@ var move = function() {
 			var dx = parseInt( dots[i].getAttribute("dx") );
 			var dy = parseInt( dots[i].getAttribute("dy") );
 			var rad = parseInt( dots[i].getAttribute("r") );
-
 			x += dx;
 			y += dy;
 			dots[i].setAttribute("cx",x);
@@ -60,7 +59,9 @@ var move = function() {
 			}
 			dots[i].setAttribute("dx",dx);
 			dots[i].setAttribute("dy",dy);
-			if (x == width/2){
+			if (rad < 1){
+				svg.removeChild(dots[i]);
+			} else if (x == width/2){
 				dots[i].setAttribute("r",rad/2);
 				var circ = makeDot(x,y);
 				circ.setAttribute("dx",dx *= -1);
@@ -68,8 +69,6 @@ var move = function() {
 				circ.setAttribute("r", rad/2);
 				svg.appendChild( circ );
 			}
-
-
 		}
 		rid = window.requestAnimationFrame(screensaver);
 	}
